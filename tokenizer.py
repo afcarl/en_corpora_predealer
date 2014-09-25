@@ -3,12 +3,13 @@
 # @Author: largelymfs
 # @Date:   2014-09-25 13:33:50
 # @Last Modified by:   largelymfs
-# @Last Modified time: 2014-09-25 14:00:49
+# @Last Modified time: 2014-09-25 14:20:02
 import string, nltk
 
 class Tokenizer:
 	def __init__(self, lower=True, punctuation=True, digits=True):
 		self.symbols = string.punctuation.replace('-','')
+		self.symbols = self.symbols.replace('\'','')
 		self.digits = string.digits
 		self.switch_lower = lower
 		self.switch_punctuation = punctuation
@@ -23,7 +24,6 @@ class Tokenizer:
 		if self.switch_digits:
 			for t in self.digits:
 				line = line.replace(t, ' ')
-		
 		return line
 
 	def tokenize(self, line):
@@ -31,6 +31,6 @@ class Tokenizer:
 		return nltk.word_tokenize(line)
 
 if __name__=="__main__":
-	sentence = "I am a student from Tsinghua University"
+	sentence = "I'm a student from Tsinghua University"
 	s = Tokenizer()
 	print s.tokenize(sentence)
