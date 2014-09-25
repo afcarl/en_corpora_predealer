@@ -3,7 +3,7 @@
 # @Author: largelymfs
 # @Date:   2014-09-25 15:26:03
 # @Last Modified by:   largelymfs
-# @Last Modified time: 2014-09-25 15:31:58
+# @Last Modified time: 2014-09-25 19:31:43
 from nltk.stem.wordnet import WordNetLemmatizer
 
 
@@ -21,6 +21,9 @@ class Lemmatizer:
     def lemma(self, words, lemmatags):
         return [self.lemmazation(word, tag) for (word, tag) in zip(words, lemmatags)]
 
+    def batch_lemma(self, wordslist, lemmatagslist):
+        return [self.lemma(words, lemmatags) for (words, lemmatags) in zip(wordslist, lemmatagslist)]
+    
 if __name__ == "__main__":
     import pos_tagger
     import tokenizer

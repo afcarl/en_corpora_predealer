@@ -3,7 +3,7 @@
 # @Author: largelymfs
 # @Date:   2014-09-25 13:51:05
 # @Last Modified by:   largelymfs
-# @Last Modified time: 2014-09-25 14:00:59
+# @Last Modified time: 2014-09-25 19:24:11
 import nltk
 
 
@@ -27,6 +27,9 @@ class TokenFilter:
 
     def filter(self, wordlist):
         return [item for item in wordlist if self.check(item)]
+
+    def batch_filter(self, wordlistlist):
+        return [self.filter(wordlistlist) for wordlist in wordlistlist]
 
 if __name__ == "__main__":
     import tokenizer

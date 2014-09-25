@@ -3,13 +3,14 @@
 # @Author: largelymfs
 # @Date:   2014-09-25 13:33:50
 # @Last Modified by:   largelymfs
-# @Last Modified time: 2014-09-25 14:20:02
+# @Last Modified time: 2014-09-25 19:22:59
 import string, nltk
 
 class Tokenizer:
 	def __init__(self, lower=True, punctuation=True, digits=True):
 		self.symbols = string.punctuation.replace('-','')
 		self.symbols = self.symbols.replace('\'','')
+		self.sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 		self.digits = string.digits
 		self.switch_lower = lower
 		self.switch_punctuation = punctuation
@@ -26,11 +27,18 @@ class Tokenizer:
 				line = line.replace(t, ' ')
 		return line
 
-	def tokenize(self, line):
-		line = self.clean_line(line)
-		return nltk.word_tokenize(line)
+	def tokenize(self, text):
+		sents = self.sentence_tokenize(text)
+		lines = [self.clean_line(line) for line in sents]
+		result = [nltk.word_tokenize(line) for line in lines]
+		return result
+		#return nltk.word_tokenize(line)
+	
+	def sentence_tokenize(self, text):
+		return self.sent_tokenizer.tokenize(text)
+
 
 if __name__=="__main__":
-	sentence = "I'm a student from Tsinghua University"
+	sentence = "I'm a student from Tsinghua University. I'm an undergraduate student."
 	s = Tokenizer()
 	print s.tokenize(sentence)
