@@ -3,7 +3,7 @@
 # @Author: largelymfs
 # @Date:   2014-09-24 21:52:46
 # @Last Modified by:   largelymfs
-# @Last Modified time: 2014-09-25 19:42:24
+# @Last Modified time: 2014-09-26 18:56:28
 from pos_tagger import Postagger
 from lemma import Lemmatizer
 from token_filter import TokenFilter
@@ -28,15 +28,35 @@ class Preprocesser:
 
     def process(self, text):
         words = self.tokenizer.tokenize(text)
-        print words
+        words = self.token_filter.filter(words)
         if self.lemma:
-            tags = self.postagger.batch_tags2lemmatags(self.postagger.batch_tags(words))
-            result = self.Lemmatizer.batch_lemma(words, tags)
+            tags = self.postagger.tags2lemmatags(self.postagger.tags(words))
+            result = self.Lemmatizer.lemma(words, tags)
         if self.pos_tag:
-            tags = self.postagger.batch_tags(words)
+            tags = self.postagger.tags(words)
             result = tags
         return result
+
+class TextPreProcessor(object):
+    def __init__(self, input_filename=None, output_filename=None):
+        self.input = input_filename
+        self.output = output_filename
+
+    def format(self, input_filename=None, output_filename=None):
+        if input_filename is not None:
+            self.input= input_filename
+        if output_filename is not None:
+            self.output = output_filename
+        processer = Preprocesser()
+        with open(self.input) as input, open(self.output,"w") as output:
+            for l in input:
+                result = processer.process(l.strip())
+                result = [" ".join(item) for item in result]
+                for item in result:
+                    print >>output, item,
+                print >>output
+                
 if __name__ == "__main__":
     text = "I'm a student in Tsinghua University. I'm studying computer science"
-    processer = Preprocesser()
-    print processer.process(text)
+    text = TextPreProcessor()
+    text.format("test.data","test.data.out")
